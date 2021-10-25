@@ -3,6 +3,12 @@ from rest_framework.views import APIView
 from rest_framework import status
 from .models import UserModel
 from .serializers import CreateUserSerializer, UserSerializer, UserSignInSerializer
+from rest_framework.generics import ListAPIView
+
+
+class RoomView(ListAPIView):
+    queryset = UserModel.objects.all()
+    serializer_class = UserSerializer
 
 
 class UserApi(APIView):
@@ -47,8 +53,6 @@ class UserSignInApi(APIView):
             return Response({"message": "Invalid Email"}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({'message': 'Invalid data...'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        
 
 
 class AddUser(APIView):
