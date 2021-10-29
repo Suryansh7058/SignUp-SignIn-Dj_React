@@ -1,8 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-
-from core.token import get_jwt_token
 from .models import UserModel
 from .serializers import CreateUserSerializer, UserSerializer, UserSignInSerializer
 from rest_framework.generics import ListAPIView
@@ -56,10 +54,9 @@ class AddUser(APIView):
                 user.last_name = last_name
                 user.email = email
                 user.password = password
-                instance = user.save(update_fields=['first_name',
-                                                    'last_name', 'email', 'password'])
-                token = get_jwt_token(instance)
-                
+                user.save(update_fields=['first_name',
+                                         'last_name', 'email', 'password'])
+
                 self.request.session['host_id'] = host
                 return Response(UserSerializer(user).data, status=status.HTTP_200_OK)
             else:
