@@ -65,8 +65,9 @@ class AddUser(APIView):
                 user.save()
                 self.request.session['host_id'] = host
                 return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
-
-        return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class UserSignInApi(APIView):

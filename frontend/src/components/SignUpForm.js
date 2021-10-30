@@ -55,8 +55,6 @@ const SignUpForm = (props) => {
       .then((result) => {
         if (result.ok) {
           return result.json();
-        } else {
-          throw new Error('Sign-In Failed in console');
         }
       })
       .then((data) => {
