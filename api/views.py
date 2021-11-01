@@ -22,10 +22,7 @@ class UserApi(APIView):
             user = UserModel.objects.filter(email=email)
             if len(user) > 0:
                 data = UserSerializer(user[0]).data
-                return Response(
-                    data=data,
-                    status=status.HTTP_200_OK
-                )
+                return Response(data, status=status.HTTP_200_OK)
             return Response({'User Not Found': 'Invalid User Email...'}, status=status.HTTP_404_NOT_FOUND)
 
         return Response({'Bad Request': 'Code Paramter Not Found in Request...'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -65,9 +62,13 @@ class AddUser(APIView):
                 user.save()
                 self.request.session['host_id'] = host
                 return Response(UserSerializer(user).data, status=status.HTTP_201_CREATED)
-        print(serializer.errors)
-        return Response(serializer.errors, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        # return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        if 'first_name' in serializer.errors.keys():
+            return Response({"error": serializer.errors['first_name']['error']}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        elif 'last_name' in serializer.errors.keys():
+            return Response({"error": serializer.errors['last_name']['error']}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response({"error": 'Email already exists'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class UserSignInApi(APIView):

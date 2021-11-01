@@ -53,11 +53,20 @@ const SignUpForm = (props) => {
 
     fetch('/api/create-user', requestOptions)
       .then((result) => {
-        if (result.ok) {
-          return result.json();
-        }
+        // if (result.ok) {
+        //   return result.json();
+        // }
+        // else {
+        //   throw new Error(result.json());
+        // }
+        return result.json();
       })
       .then((data) => {
+        if (data['error'] !== undefined) {
+          setErrorMsg(data['error']);
+          return;
+        }
+        console.log(data);
         setTimeout(() => {
           setSuccessMsg('');
           props.history.push({
@@ -70,8 +79,8 @@ const SignUpForm = (props) => {
         setSuccessMsg('Sign-In Successful');
       })
       .catch((err) => {
-        setErrorMsg('Sign-In Failed');
         console.log(err);
+        setErrorMsg('Sign-In Failed');
       });
   };
 
@@ -100,6 +109,11 @@ const SignUpForm = (props) => {
                 severity="error"
                 onClose={() => {
                   setErrorMsg('');
+                }}
+                style={{
+                  fontSize: '2rem',
+                  maxWidth: '30rem',
+                  marginBottom: '2rem',
                 }}
               >
                 {errorMsg}

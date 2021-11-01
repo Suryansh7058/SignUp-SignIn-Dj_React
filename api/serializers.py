@@ -25,4 +25,11 @@ class CreateUserSerializer(serializers.ModelSerializer):
     def validate_first_name(self, value):
         if any(char.isdigit() for char in value):
             raise ValidationError({
-                'error': 'Name cannot contain digits'})
+                'error': 'First name cannot contain digits'})
+        return value
+
+    def validate_last_name(self, value):
+        if any(char.isdigit() for char in value):
+            raise ValidationError({
+                'error': 'Last name cannot contain digits'})
+        return value
